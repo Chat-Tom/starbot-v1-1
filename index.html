@@ -74,6 +74,13 @@
       color: #777;
     }
   </style>
+  <script>
+    function redirectAfterSubmit() {
+      setTimeout(() => {
+        window.location.href = "https://starbot-v1-1-demo-01.vercel.app";
+      }, 1000);
+    }
+  </script>
 </head>
 <body>
   <div class="wrapper">
@@ -84,7 +91,7 @@
       <p>Chào mừng bạn đến với STARBOT – trợ lý thông minh hỗ trợ tương tác tự động!</p>
       <button onclick="alert('🤖 ZATRI phản xạ rồi đó!')">Thử phản xạ</button>
 
-      <form action="https://formspree.io/f/mvgannok" method="POST">
+      <form action="https://formspree.io/f/mvgannok" method="POST" onsubmit="redirectAfterSubmit()">
         <label for="name">Họ và tên</label>
         <input type="text" id="name" name="name" placeholder="Nhập họ tên của bạn" required>
 
