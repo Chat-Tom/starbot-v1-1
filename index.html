@@ -1,112 +1,44 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STARBOT Mini App</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f4f6fb;
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-    .wrapper {
-      max-width: 420px;
-      margin: 40px auto;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
-    header {
-      background: #0066cc;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
-    .content {
-      padding: 24px;
-      text-align: center;
-    }
-    .content p {
-      margin-bottom: 20px;
-    }
-    button {
-      padding: 12px 24px;
-      background: #0066cc;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background: #004999;
-    }
-    form {
-      margin-top: 24px;
-      text-align: left;
-    }
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 16px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
-    .footer {
-      padding: 16px;
-      text-align: center;
-      font-size: 12px;
-      color: #777;
-    }
-  </style>
-  <script>
-    function redirectAfterSubmit() {
-      setTimeout(() => {
-        window.location.href = "https://starbot-v1-1-demo-01.vercel.app";
-      }, 1000);
-    }
-  </script>
-</head>
-<body>
-  <div class="wrapper">
-    <header>
-      <h1>🤖 STARBOT Mini App</h1>
-    </header>
-    <div class="content">
-      <p>Chào mừng bạn đến với STARBOT – trợ lý thông minh hỗ trợ tương tác tự động!</p>
-      <button onclick="alert('🤖 ZATRI phản xạ rồi đó!')">Thử phản xạ</button>
+<hr>
+<h3>📌 Tôi quan tâm gói dịch vụ kế toán</h3>
 
-      <form action="https://formspree.io/f/mvgannok" method="POST" onsubmit="redirectAfterSubmit()">
-        <label for="name">Họ và tên</label>
-        <input type="text" id="name" name="name" placeholder="Nhập họ tên của bạn" required>
+<form id="interest-form" style="margin-top: 16px;">
+  <label for="zalo-phone">📱 Nhập số Zalo để TAXBOT liên hệ:</label>
+  <input type="text" id="zalo-phone" name="zalo-phone" placeholder="VD: 0901234567" required style="margin-bottom: 10px; padding: 10px; width: 100%; border-radius: 6px; border: 1px solid #ccc;" />
 
-        <label for="email">Email liên hệ</label>
-        <input type="email" id="email" name="email" placeholder="example@email.com" required>
+  <input type="hidden" id="package-name" value="Gói Cá Nhân Kinh Doanh" />
 
-        <label for="message">Nội dung liên hệ</label>
-        <textarea id="message" name="message" rows="4" placeholder="Bạn cần STARBOT hỗ trợ gì?" required></textarea>
+  <button type="submit" style="background-color: #007BFF; color: white; padding: 12px; border: none; border-radius: 6px; width: 100%; font-size: 16px; cursor: pointer;">
+    🚀 Tôi quan tâm gói này
+  </button>
+</form>
 
-        <button type="submit">📩 Gửi phản hồi</button>
-      </form>
-    </div>
-    <div class="footer">
-      © 2025 STARBOT | Phiên bản demo trên nền Zalo Mini App
-    </div>
-  </div>
-</body>
-</html>
+<script>
+  document.getElementById("interest-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const phone = document.getElementById("zalo-phone").value.trim();
+    const packageName = document.getElementById("package-name").value;
+
+    if (!phone.match(/^0\d{9}$/)) {
+      alert("⚠️ Vui lòng nhập số Zalo hợp lệ (bắt đầu bằng 0, đủ 10 số).");
+      return;
+    }
+
+    fetch("https://starbot-v1-1-9xol.vercel.app/webhook/starbot", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        app_id: "2992023153139013305",
+        event_type: "interest",
+        payload: {
+          message: `Zalo ${phone} quan tâm: ${packageName}`
+        }
+      })
+    }).then(res => {
+      if (res.ok) {
+        alert("✅ Đã ghi nhận. Zalo sẽ phản hồi sớm!");
+        document.getElementById("interest-form").reset();
+      } else {
+ alert("❌ Gửi thất bại! Vui lòng thử lại.");
+      }
+    });
