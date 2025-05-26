@@ -51,9 +51,26 @@
       border-left: 4px solid #007BFF;
       margin-bottom: 12px;
     }
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin: 24px 0 0;
+    }
+    .logo img {
+      width: 120px;
+      height: 120px;
+      border-radius: 24px;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Logo đầu trang -->
+  <div class="logo">
+    <img src="logo.png" alt="TAXBOT VIỆT Logo">
+  </div>
+
+  <!-- Phần nội dung chính -->
   <div class="container">
     <h1>📘 TAXBOT VIỆT</h1>
     <p style="text-align: center;">Trung tâm dịch vụ kế toán – thuế</p>
@@ -99,6 +116,16 @@
         <button>Tải báo giá chi tiết (PDF)</button>
       </a>
     </div>
+
+    <div class="section">
+      <h2>🧪 Test Webhook nâng cao</h2>
+      <form id="webhook-test-form">
+        <input type="text" id="test-zalo" placeholder="Nhập số Zalo test" required />
+        <textarea id="test-note" placeholder="Nội dung test gửi webhook..." rows="4" required></textarea>
+        <button type="submit">Gửi Test Webhook</button>
+      </form>
+      <p id="webhook-status" style="text-align: center;"></p>
+    </div>
   </div>
 
   <script>
@@ -123,15 +150,28 @@
         }
       });
     });
+
+    document.getElementById("webhook-test-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const phone = document.getElementById("test-zalo").value;
+      const note = document.getElementById("test-note").value;
+
+      fetch("https://starbot-v1-1-9xol.vercel.app/webhook/starbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          app_id: "2992023153139013305",
+          event_type: "test-webhook",
+          payload: { message: `📩 Zalo ${phone} gửi test: ${note}` }
+        })
+      }).then(res => {
+        document.getElementById("webhook-status").innerText = res.ok
+          ? "✅ Gửi test webhook thành công!"
+          : "❌ Lỗi gửi test webhook!";
+      }).catch(() => {
+        document.getElementById("webhook-status").innerText = "⚠️ Không thể kết nối.";
+      });
+    });
   </script>
 </body>
-   <div style="text-align: center; margin: 16px 0;">
-    <img src="logo.png" alt="TAXBOT VIỆT Logo" style="width: 120px; height: 120px; border-radius: 24px;" />
-  </div>
-
-  <div class="container">
-    <h1>📘 TAXBOT VIỆT</h1>
-    <p style="text-align: center;">Trung tâm dịch vụ kế toán – thuế</p>
 </html>
-
-
