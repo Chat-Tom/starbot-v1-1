@@ -52,9 +52,8 @@
       margin-bottom: 12px;
     }
     .logo {
-      display: flex;
-      justify-content: center;
-      margin: 24px 0 0;
+      text-align: center;
+      margin-bottom: 16px;
     }
     .logo img {
       width: 120px;
@@ -65,13 +64,12 @@
 </head>
 <body>
 
-  <!-- Logo đầu trang -->
-  <div class="logo">
-    <img src="logo.png" alt="TAXBOT VIỆT Logo">
-  </div>
-
-  <!-- Phần nội dung chính -->
   <div class="container">
+    <!-- Logo nằm trong container -->
+    <div class="logo">
+      <img src="logo.png" alt="TAXBOT VIỆT Logo">
+    </div>
+
     <h1>📘 TAXBOT VIỆT</h1>
     <p style="text-align: center;">Trung tâm dịch vụ kế toán – thuế</p>
 
@@ -143,11 +141,9 @@
           payload: { message: `Zalo ${phone} quan tâm: ${pkg}` }
         })
       }).then(res => {
-        if (res.ok) {
-          alert("✅ Đã gửi quan tâm thành công!");
-        } else {
-          alert("❌ Lỗi gửi. Thử lại!");
-        }
+        alert(res.ok
+          ? "✅ Đã gửi quan tâm thành công!"
+          : "❌ Lỗi gửi. Thử lại!");
       });
     });
 
