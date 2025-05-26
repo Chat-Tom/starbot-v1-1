@@ -1,44 +1,137 @@
-<hr>
-<h3>📌 Tôi quan tâm gói dịch vụ kế toán</h3>
-
-<form id="interest-form" style="margin-top: 16px;">
-  <label for="zalo-phone">📱 Nhập số Zalo để TAXBOT liên hệ:</label>
-  <input type="text" id="zalo-phone" name="zalo-phone" placeholder="VD: 0901234567" required style="margin-bottom: 10px; padding: 10px; width: 100%; border-radius: 6px; border: 1px solid #ccc;" />
-
-  <input type="hidden" id="package-name" value="Gói Cá Nhân Kinh Doanh" />
-
-  <button type="submit" style="background-color: #007BFF; color: white; padding: 12px; border: none; border-radius: 6px; width: 100%; font-size: 16px; cursor: pointer;">
-    🚀 Tôi quan tâm gói này
-  </button>
-</form>
-
-<script>
-  document.getElementById("interest-form").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const phone = document.getElementById("zalo-phone").value.trim();
-    const packageName = document.getElementById("package-name").value;
-
-    if (!phone.match(/^0\d{9}$/)) {
-      alert("⚠️ Vui lòng nhập số Zalo hợp lệ (bắt đầu bằng 0, đủ 10 số).");
-      return;
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaxBot Việt – Trung tâm dịch vụ kế toán</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0 16px;
+      background: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
     }
+    .container {
+      max-width: 480px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      text-align: center;
+      color: #002d5e;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .section {
+      margin-top: 32px;
+    }
+    .package {
+      background: #eef3f8;
+      padding: 12px;
+      border-left: 4px solid #007BFF;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📘 TAXBOT VIỆT</h1>
+    <p style="text-align: center;">Trung tâm dịch vụ kế toán – thuế</p>
 
-    fetch("https://starbot-v1-1-9xol.vercel.app/webhook/starbot", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        app_id: "2992023153139013305",
-        event_type: "interest",
-        payload: {
-          message: `Zalo ${phone} quan tâm: ${packageName}`
+    <div class="section">
+      <h2>📦 Gói dịch vụ nổi bật</h2>
+      <div class="package">🔹 Cá nhân / Hộ KD: từ 300.000đ/tháng</div>
+      <div class="package">🔹 Doanh nghiệp siêu nhỏ: 700.000–1.500.000đ/tháng</div>
+      <div class="package">🔹 Công ty vừa & nhỏ: từ 2.000.000đ/tháng</div>
+      <div class="package">🔹 Startup công nghệ: từ 3.000.000đ/tháng</div>
+    </div>
+
+    <div class="section">
+      <h2>🚀 Nút 6: Tôi quan tâm gói này</h2>
+      <form id="interest-form">
+        <input type="text" id="zalo-phone" placeholder="Nhập số Zalo" required />
+        <input type="hidden" id="package-name" value="Gói Cá Nhân Kinh Doanh" />
+        <button type="submit">Tôi quan tâm gói này</button>
+      </form>
+    </div>
+
+    <div class="section">
+      <h2>📝 Nút 7: Đăng ký tư vấn</h2>
+      <form id="contact-form">
+        <input type="text" placeholder="Họ và tên" required />
+        <input type="text" placeholder="SĐT/Zalo" required />
+        <input type="text" placeholder="Tên hoặc Mã số thuế doanh nghiệp" required />
+        <button type="submit">Gửi đăng ký tư vấn</button>
+      </form>
+    </div>
+
+    <div class="section">
+      <h2>💬 Nút 8: Gửi câu hỏi</h2>
+      <form id="question-form">
+        <textarea rows="4" placeholder="Nhập câu hỏi của bạn..." required></textarea>
+        <button type="submit">Gửi câu hỏi</button>
+      </form>
+    </div>
+
+    <div class="section">
+      <h2>📎 Nút 9: Tải báo giá</h2>
+      <a href="https://drive.google.com/uc?id=1example123456pdf" target="_blank">
+        <button>Tải báo giá chi tiết (PDF)</button>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("interest-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const phone = document.getElementById("zalo-phone").value;
+      const pkg = document.getElementById("package-name").value;
+
+      fetch("https://starbot-v1-1-9xol.vercel.app/webhook/starbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          app_id: "2992023153139013305",
+          event_type: "interest",
+          payload: { message: `Zalo ${phone} quan tâm: ${pkg}` }
+        })
+      }).then(res => {
+        if (res.ok) {
+          alert("✅ Đã gửi quan tâm thành công!");
+        } else {
+          alert("❌ Lỗi gửi. Thử lại!");
         }
-      })
-    }).then(res => {
-      if (res.ok) {
-        alert("✅ Đã ghi nhận. Zalo sẽ phản hồi sớm!");
-        document.getElementById("interest-form").reset();
-      } else {
- alert("❌ Gửi thất bại! Vui lòng thử lại.");
-      }
+      });
     });
+  </script>
+</body>
+   <div style="text-align: center; margin: 16px 0;">
+    <img src="logo.png" alt="TAXBOT VIỆT Logo" style="width: 120px; height: 120px; border-radius: 24px;" />
+  </div>
+
+  <div class="container">
+    <h1>📘 TAXBOT VIỆT</h1>
+    <p style="text-align: center;">Trung tâm dịch vụ kế toán – thuế</p>
+</html>
+
+
