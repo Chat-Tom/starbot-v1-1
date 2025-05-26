@@ -25,7 +25,7 @@
       text-align: center;
       color: #002d5e;
     }
-    input, textarea, button, select {
+    input, textarea, button {
       width: 100%;
       padding: 12px;
       margin: 8px 0;
@@ -66,7 +66,7 @@
 
   <div class="container">
     <div class="logo">
-      <img src="logo.png" alt="TAXBOT VIỆT Logo" />
+      <img src="logo.png" alt="TAXBOT VIỆT Logo">
     </div>
 
     <h1>📘 TAXBOT VIỆT</h1>
@@ -78,7 +78,7 @@
       <div class="package">🔹 Doanh nghiệp siêu nhỏ: 700.000–1.500.000đ/tháng</div>
       <div class="package">🔹 Công ty vừa & nhỏ: từ 2.000.000đ/tháng</div>
       <div class="package">🔹 Startup công nghệ: từ 3.000.000đ/tháng</div>
-      <div class="package">🎯 Gói đặc biệt 1.000.000đ/tháng: tặng phần mềm kế toán Misa 12 tháng + App doanh nghiệp (ZATRI tài trợ)</div>
+      <div class="package">🎯 Gói đặc biệt: 1.000.000đ/tháng tặng phần mềm kế toán MISA + app ZATRI tài trợ</div>
     </div>
 
     <div class="section">
@@ -91,18 +91,15 @@
     </div>
 
     <div class="section">
-      <h2>✅ Xác nhận đăng ký gói dịch vụ</h2>
+      <h2>🧾 Tôi đồng ý và xác nhận gói dịch vụ</h2>
       <form id="register-form">
         <input type="text" id="name" placeholder="Họ và tên" required />
-        <input type="text" id="phone" placeholder="Số Zalo" required />
-        <input type="text" id="company" placeholder="Tên công ty/MST" required />
-        <select id="package">
-          <option>Gói cá nhân</option>
-          <option>Combo MISA + App doanh nghiệp</option>
-        </select>
-        <button type="submit">✅ Tôi đồng ý và xác nhận</button>
+        <input type="text" id="phone" placeholder="SĐT/Zalo" required />
+        <input type="text" id="company" placeholder="Tên công ty / Mã số thuế" required />
+        <input type="text" id="package" placeholder="Gói dịch vụ bạn chọn" required />
+        <button type="submit">✅ Tôi đồng ý & Xác nhận</button>
       </form>
-      <p id="submit-status" style="text-align:center; color:green;"></p>
+      <p id="submit-status" style="text-align: center;"></p>
     </div>
 
     <div class="section">
@@ -116,3 +113,70 @@
     </div>
   </div>
 
+  <script>
+    // Nút quan tâm
+    document.getElementById("interest-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const phone = document.getElementById("zalo-phone").value;
+      const pkg = document.getElementById("package-name").value;
+
+      fetch("https://script.google.com/macros/s/AKfycbwWG2gzuzD1zQb2tY9NaY43BK0Y74WK-v0tcTWyc3juH5fHnLEDiaBM8byyafTco78xDQ/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: "Khách quan tâm",
+          phone,
+          company: "Chưa cung cấp",
+          package: pkg
+        })
+      }).then(res => {
+        alert(res.ok ? "✅ Đã gửi quan tâm thành công!" : "❌ Lỗi gửi. Thử lại!");
+      });
+    });
+
+    // Nút xác nhận đăng ký
+    document.getElementById("register-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      const company = document.getElementById("company").value;
+      const pkg = document.getElementById("package").value;
+
+      fetch("https://script.google.com/macros/s/AKfycbwWG2gzuzD1zQb2tY9NaY43BK0Y74WK-v0tcTWyc3juH5fHnLEDiaBM8byyafTco78xDQ/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phone, company, package: pkg })
+      }).then(res => {
+        document.getElementById("submit-status").innerText = res.ok
+          ? "✅ Đăng ký thành công! Hệ thống sẽ xử lý và tạo PDF báo giá."
+          : "❌ Lỗi gửi đăng ký. Thử lại!";
+      }).catch(() => {
+        document.getElementById("submit-status").innerText = "⚠️ Không thể kết nối hệ thống.";
+      });
+    });
+
+    // Webhook nâng cao
+    document.getElementById("webhook-test-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const phone = document.getElementById("test-zalo").value;
+      const note = document.getElementById("test-note").value;
+
+      fetch("https://starbot-v1-1-9xol.vercel.app/webhook/starbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          app_id: "2992023153139013305",
+          event_type: "test-webhook",
+          payload: { message: `📩 Zalo ${phone} gửi test: ${note}` }
+        })
+      }).then(res => {
+        document.getElementById("webhook-status").innerText = res.ok
+          ? "✅ Gửi test webhook thành công!"
+          : "❌ Lỗi gửi test webhook!";
+      }).catch(() => {
+        document.getElementById("webhook-status").innerText = "⚠️ Không thể kết nối.";
+      });
+    });
+  </script>
+</body>
+</html>
