@@ -25,7 +25,7 @@
       text-align: center;
       color: #002d5e;
     }
-    input, textarea, button {
+    input, textarea, button, select {
       width: 100%;
       padding: 12px;
       margin: 8px 0;
@@ -65,9 +65,8 @@
 <body>
 
   <div class="container">
-    <!-- Logo nằm trong container -->
     <div class="logo">
-      <img src="logo.png" alt="TAXBOT VIỆT Logo">
+      <img src="logo.png" alt="TAXBOT VIỆT Logo" />
     </div>
 
     <h1>📘 TAXBOT VIỆT</h1>
@@ -79,10 +78,11 @@
       <div class="package">🔹 Doanh nghiệp siêu nhỏ: 700.000–1.500.000đ/tháng</div>
       <div class="package">🔹 Công ty vừa & nhỏ: từ 2.000.000đ/tháng</div>
       <div class="package">🔹 Startup công nghệ: từ 3.000.000đ/tháng</div>
+      <div class="package">🎯 Gói đặc biệt 1.000.000đ/tháng: tặng phần mềm kế toán Misa 12 tháng + App doanh nghiệp (ZATRI tài trợ)</div>
     </div>
 
     <div class="section">
-      <h2>🚀 Nút 6: Tôi quan tâm gói này</h2>
+      <h2>🚀 Tôi quan tâm gói này</h2>
       <form id="interest-form">
         <input type="text" id="zalo-phone" placeholder="Nhập số Zalo" required />
         <input type="hidden" id="package-name" value="Gói Cá Nhân Kinh Doanh" />
@@ -91,28 +91,18 @@
     </div>
 
     <div class="section">
-      <h2>📝 Nút 7: Đăng ký tư vấn</h2>
-      <form id="contact-form">
-        <input type="text" placeholder="Họ và tên" required />
-        <input type="text" placeholder="SĐT/Zalo" required />
-        <input type="text" placeholder="Tên hoặc Mã số thuế doanh nghiệp" required />
-        <button type="submit">Gửi đăng ký tư vấn</button>
+      <h2>✅ Xác nhận đăng ký gói dịch vụ</h2>
+      <form id="register-form">
+        <input type="text" id="name" placeholder="Họ và tên" required />
+        <input type="text" id="phone" placeholder="Số Zalo" required />
+        <input type="text" id="company" placeholder="Tên công ty/MST" required />
+        <select id="package">
+          <option>Gói cá nhân</option>
+          <option>Combo MISA + App doanh nghiệp</option>
+        </select>
+        <button type="submit">✅ Tôi đồng ý và xác nhận</button>
       </form>
-    </div>
-
-    <div class="section">
-      <h2>💬 Nút 8: Gửi câu hỏi</h2>
-      <form id="question-form">
-        <textarea rows="4" placeholder="Nhập câu hỏi của bạn..." required></textarea>
-        <button type="submit">Gửi câu hỏi</button>
-      </form>
-    </div>
-
-    <div class="section">
-      <h2>📎 Nút 9: Tải báo giá</h2>
-      <a href="https://drive.google.com/uc?id=1example123456pdf" target="_blank">
-        <button>Tải báo giá chi tiết (PDF)</button>
-      </a>
+      <p id="submit-status" style="text-align:center; color:green;"></p>
     </div>
 
     <div class="section">
@@ -126,48 +116,3 @@
     </div>
   </div>
 
-  <script>
-    document.getElementById("interest-form").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const phone = document.getElementById("zalo-phone").value;
-      const pkg = document.getElementById("package-name").value;
-
-      fetch("https://starbot-v1-1-9xol.vercel.app/webhook/starbot", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          app_id: "2992023153139013305",
-          event_type: "interest",
-          payload: { message: `Zalo ${phone} quan tâm: ${pkg}` }
-        })
-      }).then(res => {
-        alert(res.ok
-          ? "✅ Đã gửi quan tâm thành công!"
-          : "❌ Lỗi gửi. Thử lại!");
-      });
-    });
-
-    document.getElementById("webhook-test-form").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const phone = document.getElementById("test-zalo").value;
-      const note = document.getElementById("test-note").value;
-
-      fetch("https://starbot-v1-1-9xol.vercel.app/webhook/starbot", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          app_id: "2992023153139013305",
-          event_type: "test-webhook",
-          payload: { message: `📩 Zalo ${phone} gửi test: ${note}` }
-        })
-      }).then(res => {
-        document.getElementById("webhook-status").innerText = res.ok
-          ? "✅ Gửi test webhook thành công!"
-          : "❌ Lỗi gửi test webhook!";
-      }).catch(() => {
-        document.getElementById("webhook-status").innerText = "⚠️ Không thể kết nối.";
-      });
-    });
-  </script>
-</body>
-</html>
