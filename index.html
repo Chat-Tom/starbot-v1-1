@@ -1,1 +1,198 @@
-...
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaxBot Việt – Trung tâm dịch vụ kế toán</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0 16px;
+      background: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 480px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      text-align: center;
+      color: #002d5e;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .section {
+      margin-top: 32px;
+    }
+    .package {
+      background: #eef3f8;
+      padding: 12px;
+      border-left: 4px solid #007BFF;
+      margin-bottom: 12px;
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .logo img {
+      width: 120px;
+      height: 120px;
+      border-radius: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="logo.png" alt="TAXBOT VIỆT Logo">
+    </div>
+
+    <h1>📘 TAXBOT VIỆT</h1>
+    <p style="text-align: center;">Trung tâm dịch vụ kế toán – thuế</p>
+
+    <div class="section">
+      <h2>📦 Gói dịch vụ nổi bật</h2>
+      <div class="package">🔹 Cá nhân / Hộ KD: từ 300.000đ/tháng</div>
+      <div class="package">🔹 Doanh nghiệp siêu nhỏ: 700.000–1.500.000đ/tháng</div>
+      <div class="package">🔹 Công ty vừa & nhỏ: từ 2.000.000đ/tháng</div>
+      <div class="package">🔹 Startup công nghệ: từ 3.000.000đ/tháng</div>
+      <div class="package">🎯 Gói đặc biệt 1.000.000đ/tháng: tặng phần mềm kế toán Misa 12 tháng + App doanh nghiệp (ZATRI tài trợ)</div>
+    </div>
+
+    <div class="section">
+      <h2>🚀 Tôi quan tâm gói này</h2>
+      <form id="interest-form">
+        <input type="text" id="zalo-phone" placeholder="Nhập số Zalo" required />
+        <input type="hidden" id="package-name" value="Gói Cá Nhân Kinh Doanh" />
+        <button type="submit">Tôi quan tâm gói này</button>
+      </form>
+    </div>
+
+    <div class="section">
+      <h2>✅ Tôi đồng ý & Xác nhận</h2>
+      <form id="register-form">
+        <input type="text" id="name" placeholder="Họ và tên" required />
+        <input type="text" id="phone" placeholder="SĐT/Zalo" required />
+        <input type="text" id="company" placeholder="Tên công ty/MST" required />
+        <input type="text" id="package" placeholder="Gói dịch vụ" required />
+        <button type="submit">Tôi đồng ý & Xác nhận</button>
+      </form>
+      <p id="submit-status" style="text-align:center;"></p>
+    </div>
+
+    <div class="section">
+      <h2>🧪 Test Webhook nâng cao</h2>
+      <form id="webhook-test-form">
+        <input type="text" id="test-zalo" placeholder="Nhập số Zalo test" required />
+        <textarea id="test-note" placeholder="Nội dung test gửi webhook..." rows="4" required></textarea>
+        <button type="submit">Gửi Test Webhook</button>
+      </form>
+      <p id="webhook-status" style="text-align: center;"></p>
+    </div>
+  </div>
+
+  <script>
+    // ✅ Webhook Apps Script
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwWG2gzuzD1zQb2tY9NaY43BK0Y74WK-v0tcTWyc3juH5fHnLEDiaBM8byvafTco78xDQ/exec";
+
+    // "Tôi quan tâm gói này"
+    document.getElementById("interest-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const phone = document.getElementById("zalo-phone").value;
+      const pkg = document.getElementById("package-name").value;
+
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: "Khách quan tâm",
+          phone,
+          company: "Chưa cung cấp",
+          package: pkg
+        })
+      })
+      .then(res => {
+        console.log("[✅ Quan tâm] Response:", res);
+        alert(res.ok ? "✅ Đã gửi quan tâm thành công!" : "❌ Lỗi gửi. Thử lại!");
+      })
+      .catch(err => {
+        console.error("[❌ Quan tâm] Lỗi gửi:", err);
+        alert("⚠️ Không thể gửi dữ liệu quan tâm!");
+      });
+    });
+
+    // "Tôi đồng ý & xác nhận"
+    document.getElementById("register-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      const company = document.getElementById("company").value;
+      const pkg = document.getElementById("package").value;
+
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phone, company, package: pkg })
+      })
+      .then(res => {
+        console.log("[✅ Xác nhận] Response:", res);
+        document.getElementById("submit-status").innerText = res.ok
+          ? "✅ Đăng ký thành công! Hệ thống sẽ xử lý và phản hồi."
+          : "❌ Lỗi gửi đăng ký. Thử lại!";
+      })
+      .catch(err => {
+        console.error("[❌ Xác nhận] Lỗi gửi:", err);
+        document.getElementById("submit-status").innerText = "⚠️ Không thể kết nối hệ thống.";
+      });
+    });
+
+    // "Test webhook nâng cao"
+    document.getElementById("webhook-test-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const phone = document.getElementById("test-zalo").value;
+      const note = document.getElementById("test-note").value;
+
+      fetch("https://starbot-v1-1-9xol.vercel.app/webhook/starbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          app_id: "2992023153139013305",
+          event_type: "test-webhook",
+          payload: { message: `📩 Zalo ${phone} gửi test: ${note}` }
+        })
+      })
+      .then(res => {
+        console.log("[🧪 Webhook Test] Response:", res);
+        document.getElementById("webhook-status").innerText = res.ok
+          ? "✅ Gửi test webhook thành công!"
+          : "❌ Lỗi gửi test webhook!";
+      })
+      .catch(err => {
+        console.error("[❌ Webhook Test] Lỗi:", err);
+        document.getElementById("webhook-status").innerText = "⚠️ Không thể kết nối.";
+      });
+    });
+  </script>
+</body>
+</html>
