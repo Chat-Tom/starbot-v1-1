@@ -1,79 +1,164 @@
-<script>
-  // 📩 Submit – Tôi quan tâm gói này
-  document.getElementById("interest-form").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const phone = document.getElementById("zalo-phone").value;
-    const pkg = document.getElementById("package-name").value;
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaxBot Việt – Trung tâm dịch vụ kế toán</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0 16px;
+      background: #f5f7fa;
+      color: #333;
+    }
+    .container {
+      max-width: 480px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      text-align: center;
+      color: #002d5e;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .section {
+      margin-top: 32px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📘 TAXBOT VIỆT</h1>
+    <p style="text-align: center;">Trung tâm dịch vụ kế toán – thuế</p>
 
-    fetch("/api/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: "Khách quan tâm",
-        phone,
-        company: "Chưa cung cấp",
-        package: pkg
+    <div class="section">
+      <h2>🚀 Tôi quan tâm gói này</h2>
+      <form id="interest-form">
+        <input type="text" id="zalo-phone" placeholder="Nhập số Zalo" required />
+        <input type="hidden" id="package-name" value="Gói Cá Nhân Kinh Doanh" />
+        <button type="submit">Tôi quan tâm gói này</button>
+      </form>
+    </div>
+
+    <div class="section">
+      <h2>✅ Tôi đồng ý & Xác nhận</h2>
+      <form id="register-form">
+        <input type="text" id="name" placeholder="Họ và tên" required />
+        <input type="text" id="phone" placeholder="SĐT/Zalo" required />
+        <input type="text" id="company" placeholder="Tên công ty/MST" required />
+        <input type="text" id="package" placeholder="Gói dịch vụ" required />
+        <button type="submit">Tôi đồng ý & Xác nhận</button>
+      </form>
+      <p id="submit-status" style="text-align:center;"></p>
+    </div>
+
+    <div class="section">
+      <h2>🧪 Test Webhook nâng cao</h2>
+      <form id="webhook-test-form">
+        <input type="text" id="test-zalo" placeholder="Nhập số Zalo test" required />
+        <textarea id="test-note" placeholder="Nội dung test gửi webhook." rows="4" required></textarea>
+        <button type="submit">Gửi Test Webhook</button>
+      </form>
+      <p id="webhook-status" style="text-align:center;"></p>
+    </div>
+  </div>
+
+  <script>
+    // 📩 Submit – Tôi quan tâm gói này
+    document.getElementById("interest-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const phone = document.getElementById("zalo-phone").value;
+      const pkg = document.getElementById("package-name").value;
+
+      fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: "Khách quan tâm",
+          phone,
+          company: "Chưa cung cấp",
+          package: pkg
+        })
       })
-    })
-    .then(res => res.json())
-    .then(data => {
-      alert(data.message || "✅ Gửi thành công!");
-    })
-    .catch(err => {
-      console.error("[❌ Quan tâm] Lỗi:", err);
-      alert("⚠️ Không thể gửi dữ liệu quan tâm!");
-    });
-  });
-
-  // 📝 Submit – Tôi đồng ý & xác nhận
-  document.getElementById("register-form").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const name = document.getElementById("name").value;
-    const phone = document.getElementById("phone").value;
-    const company = document.getElementById("company").value;
-    const pkg = document.getElementById("package").value;
-
-    fetch("/api/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, phone, company, package: pkg })
-    })
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("submit-status").innerText =
-        data.message || "✅ Đăng ký thành công!";
-    })
-    .catch(err => {
-      console.error("[❌ Đăng ký] Lỗi:", err);
-      document.getElementById("submit-status").innerText = "⚠️ Không thể kết nối hệ thống.";
-    });
-  });
-
-  // 🧪 Submit – Test webhook nâng cao
-  document.getElementById("webhook-test-form").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const phone = document.getElementById("test-zalo").value;
-    const note = document.getElementById("test-note").value;
-
-    fetch("/api/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        app_id: "2992023153139013305",
-        event_type: "test-webhook",
-        payload: {
-          message: `📩 Zalo ${phone} gửi test: ${note}`
-        }
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message || "✅ Gửi thành công!");
       })
-    })
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("webhook-status").innerText =
-        data.message || "✅ Webhook đã nhận!";
-    })
-    .catch(err => {
-      console.error("[❌ Webhook Test] Lỗi:", err);
-      document.getElementById("webhook-status").innerText = "⚠️ Không thể kết nối.";
+      .catch(err => {
+        console.error("[❌ Quan tâm] Lỗi:", err);
+        alert("⚠️ Không thể gửi dữ liệu quan tâm!");
+      });
     });
-  });
-</script>
+
+    // 📝 Submit – Tôi đồng ý & xác nhận
+    document.getElementById("register-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      const company = document.getElementById("company").value;
+      const pkg = document.getElementById("package").value;
+
+      fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phone, company, package: pkg })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("submit-status").innerText = data.message || "✅ Đăng ký thành công!";
+      })
+      .catch(err => {
+        console.error("[❌ Đăng ký] Lỗi:", err);
+        document.getElementById("submit-status").innerText = "⚠️ Không thể kết nối hệ thống.";
+      });
+    });
+
+    // 🧪 Submit – Test webhook nâng cao
+    document.getElementById("webhook-test-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const phone = document.getElementById("test-zalo").value;
+      const note = document.getElementById("test-note").value;
+
+      fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          app_id: "2992023153139013305",
+          event_type: "test-webhook",
+          payload: {
+            message: `📩 Zalo ${phone} gửi test: ${note}`
+          }
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("webhook-status").innerText = data.message || "✅ Webhook đã nhận!";
+      })
+      .catch(err => {
+        console.error("[❌ Webhook Test] Lỗi:", err);
+        document.getElementById("webhook-status").innerText = "⚠️ Không thể kết nối.";
+      });
+    });
+  </script>
+</body>
+</html>
